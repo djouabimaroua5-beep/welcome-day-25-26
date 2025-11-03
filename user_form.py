@@ -181,13 +181,16 @@ def get_gspread_client():
     from google.oauth2.service_account import Credentials
     import gspread
 
-    # Prefer Streamlit secrets (Streamlit Cloud)
     if "gcp_service_account" in st.secrets:
         info = st.secrets["gcp_service_account"]
+
+        # ✅ Make a mutable copy
+        info = dict(info)
+
         if isinstance(info, str):
             info = json.loads(info)
 
-        # ✅ FIX: replace escaped newlines with real newlines
+        # ✅ Replace escaped newlines safely
         if "private_key" in info:
             info["private_key"] = info["private_key"].replace("\\n", "\n")
 
