@@ -176,13 +176,9 @@ CANONICAL_HEADERS = [
 # Helpers: GSpread client (secrets fallback)
 # ------------------------------
 def get_gspread_client():
-    info = st.secrets["gcp_service_account"]  # Already a dict
-    creds = Credentials.from_service_account_info(
-        info, 
-        scopes=[
-            "https://www.googleapis.com/auth/spreadsheets",
-            "https://www.googleapis.com/auth/drive"
-        ]
+    creds = Credentials.from_service_account_file(
+        "service_account.json",
+        scopes=["https://www.googleapis.com/auth/spreadsheets"]
     )
     client = gspread.authorize(creds)
     return client
