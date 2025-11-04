@@ -200,9 +200,10 @@ def open_sheet(sheet_id: str):
         st.error("Could not connect to Google Sheets — check credentials and SHEET_ID.")
         st.exception(e)
         st.stop()
-
+        
+sheet = open_sheet(SHEET_ID)
 # ensure header row exists and matches canonical headers
-def ensure_headers():
+def ensure_headers(sheet=open_sheet(SHEET_ID)):
     try:
         current = sheet.row_values(1)
         if current[:len(CANONICAL_HEADERS)] != CANONICAL_HEADERS:
@@ -213,7 +214,7 @@ def ensure_headers():
 ensure_headers()
 
 # Append with retry
-def append_row_with_retry(row, retries=3, backoff=0.4):
+def append_row_with_retry(sheet,row, retries=3, backoff=0.4):
     last_exc = None
     for i in range(retries):
         try:
