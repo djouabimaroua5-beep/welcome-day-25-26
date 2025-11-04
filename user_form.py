@@ -300,8 +300,9 @@ if remaining.total_seconds() > 0:
             
             st.markdown("---")
 
-            st.subheader("📊 Domain Preference Order — Rank all three (no duplicates)")
-
+            st.subheader("📊 Domain Preference Order — Rank all three")
+        
+            st.info("**Tech** : focusing on robotics , programming, ai and security where we turned ideas into real projects.\n\n**Media** : handles design, social media and content creation shaping the club image.\n\n**Sponsoring** : manages partnership, sponsorship and events , connecting the club with companies and opportunities.")
             options = ["Tech", "Media", "Sponsor"]
 
             first = st.selectbox("1️⃣ First Choice", options, key="first_domain")
@@ -317,7 +318,7 @@ if remaining.total_seconds() > 0:
             tech_project_desc = st.multiselect("🧠 Describe a project / competition / experience", ["Participated in national or international competitions","Designed (alone or in a team) the UI/UX of an app or website","Built a fully functional robot","Developed a responsive website","Trained an AI model","Created a game","Modeled or implemented a security system","Developed a fully functional mobile application","Created an original project or innovative solution", "Modified or improved existing ideas or systems", "Conduct practical experiments or hands-on technical tests occasionally","Not yet, but excited to start"])
             tech_portfolio = st.selectbox("🌐 Do you have a portfolio?", ["yes","no"])
             tech_tools = st.multiselect("🧰 Tools", ["Arduino / ESP32 / Raspberry Pi /sensors","Unity","Figma","Java","Git/GitHub","Linux","Database(SQL / MongoDB)","Docker/VM","VS Code / IntelliJ / PyCharm","APIs / Postman","Cloud Services (AWS, Firebase, etc.)","Flutter","No, but I’d like to try"])
-            tech_self_rate = st.slider("Rate yourself (1–5)", 1, 5, 3)
+            tech_self_rate = st.slider("Rate yourself (1–5)", 0, 5, 3)
 
             st.markdown("---")
             st.subheader("🎨 Design & Media Section")
@@ -365,7 +366,7 @@ if remaining.total_seconds() > 0:
             leadership = st.selectbox("Would you like to take leadership responsibilities in the future? ", ["Yes, I’m interested","Maybe later","Not for now"])
             challenge = st.text_area("Describe one challenge you faced and how you overcame it while working with a team.")
             manage_time = st.text_input("How do you manage your time between studies and other activities?")
-            communication_skills = st.text_input("Rate your communication skills (1–5)")
+            communication_skills = st.slider("Rate your communication skills (1–5)",1,5,3)
 
             public_speaking = st.text_input("How comfortable are you with public speaking or presenting ideas?") 
             Anything_toadd = st.text_area("Anything else you’d like us to know?")
@@ -690,7 +691,7 @@ if remaining.total_seconds() > 0:
                                     elif domain_order[0] == "Sponsoring":
                                         st.session_state["selected_first_domain_areas"] = sponsor_data["areas"]
                                     
-                                    st.success(f" one more Click to finish, {name}! 🎉")
+                                    st.success(f" Zid clicki {name}, zid! 👀")
                                     go_to_info()
 
                                 except Exception as e:
