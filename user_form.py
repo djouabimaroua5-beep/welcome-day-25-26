@@ -58,7 +58,7 @@ def add_bg_from_local(image_file):
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            color: white !important;
+            
         }}
 
         /* Transparent header */
@@ -78,12 +78,12 @@ def add_bg_from_local(image_file):
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            color: white !important;
+            
         }}
 
         /* Ensure all text inside the form is white */
         div[data-testid="stForm"] * {{
-            color: white !important;
+            
         }}
 
         /* Make input boxes and selects readable */
@@ -91,7 +91,7 @@ def add_bg_from_local(image_file):
         .stSelectbox > div > div > select,
         .stTextArea textarea {{
             background-color: rgba(255,255,255,0.15);
-            color: white !important;
+            
             border: 1px solid rgba(255,255,255,0.3);
         }}
 
@@ -255,7 +255,7 @@ if remaining.total_seconds() > 0:
     if st.session_state.page == "form":
                 
         st.title("🚀 ITC Club — Application Form")
-        st.markdown("Please complete required fields. After submit the data is stored and you'll receive a confirmation email (if configured).")
+        st.markdown("Please complete required fields. After submit the data is stored and you'll receive a confirmation .")
         st.markdown("---")
         
         #st.markdown(
