@@ -176,31 +176,32 @@ CANONICAL_HEADERS = [
 # Helpers: GSpread client (secrets fallback)
 # ------------------------------
 def get_gspread_client():
-    """
-    Create a gspread client using the service account info from Streamlit secrets.
-    Works directly with Streamlit Cloud without JSON files.
-    """
-    info = st.secrets["gcp_service_account"]  # This is a dict/AttrDict
-    creds = Credentials.from_service_account_info(
-        info,
-        scopes=["https://www.googleapis.com/auth/spreadsheets"]
-    )
-    client = gspread.authorize(creds)
-    return client
+    try:
+        info = st.secrets["gcp_service_account"]["key"]
+        info = json.loads(info)
+        creds = Credentials.from_service_account_info(
+            info, scopes=["https://www.googleapis.com/auth/spreadsheets"]
+        )
+        client = gspread.authorize(creds)
+        return client
+    except Exception as e:
+        st.error(f"❌ Error creating GSpread client: {e}")
+        st.stop()
 
-def open_sheet():
-    """
-    Open a sheet by its ID and return the first worksheet.
-    """
+# ---------------------------
+# Open the form sheet
+# ---------------------------
+@st.cache_resource
+def open_form_sheet(sheet_id):
     client = get_gspread_client()
-    return client.open_by_key(SHEET_ID).sheet1
+    try:
+        sheet = client.open_by_key(sheet_id).sheet1
+        return sheet
+    except Exception as e:
+        st.error(f"❌ Could not connect to Form Sheet: {e}")
+        st.stop()
 
-try:
-    sheet = open_sheet()
-except Exception as e:
-    st.error("Could not connect to Google Sheets — check credentials and SHEET_ID.")
-    st.exception(e)
-    st.stop()
+sheet = open_form_sheet(SHEET_ID)
 
 # ensure header row exists and matches canonical headers
 def ensure_headers(sheet):
@@ -652,7 +653,7 @@ if remaining.total_seconds() > 0:
 
                                 # append with retry
                                 try:
-                                    append_row_with_retry(row)
+                                    append_row_with_retry(sheet,row)
                                     
                                     # st.balloons()
                                     st.session_state.submitted = True

@@ -69,11 +69,11 @@ def get_gspread_client():
         creds = Credentials.from_service_account_info(
             info, scopes=["https://www.googleapis.com/auth/spreadsheets"]
         )
-    else:
-        creds = Credentials.from_service_account_file(
-            "last-f1197-42b004ea88d5 (1).json",
-            scopes=["https://www.googleapis.com/auth/spreadsheets"]
-        )
+    # else:
+    #     creds = Credentials.from_service_account_file(
+    #         "last-f1197-42b004ea88d5 (1).json",
+    #         scopes=["https://www.googleapis.com/auth/spreadsheets"]
+    #     )
     return gspread.authorize(creds)
 
 
