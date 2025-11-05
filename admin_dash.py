@@ -62,49 +62,48 @@ SHEET_ID_form = "1wpyHQf51TxG7mUM6MikyGBsz9maN471y1sO03BPOEUo"
 SHEET_ID_Reviews = "18uodDjMAL3_haYUwoBEbM1cNtvsQKIcldAjjZKnQJd8"
 
 def get_gspread_client():
-    if "gcp_service_account" in st.secrets:
-        info = st.secrets["gcp_service_account"]
-        if isinstance(info, str):
-            info = json.loads(info)
+    try:
+        info = st.secrets["gcp_service_account"]["key"]
+        info = json.loads(info)
         creds = Credentials.from_service_account_info(
             info, scopes=["https://www.googleapis.com/auth/spreadsheets"]
         )
-    # else:
-    #     creds = Credentials.from_service_account_file(
-    #         "last-f1197-42b004ea88d5 (1).json",
-    #         scopes=["https://www.googleapis.com/auth/spreadsheets"]
-    #     )
-    return gspread.authorize(creds)
+        client = gspread.authorize(creds)
+        return client
+    except Exception as e:
+        st.error(f"❌ Error creating GSpread client: {e}")
+        st.stop()
 
 
 # -------------------------------
 # FORM SHEET (user responses)
 # -------------------------------
 @st.cache_resource
-def open_form_sheet():
+def open_form_sheet(sheet_id):
     client = get_gspread_client()
-    return client.open_by_key(SHEET_ID_form).sheet1
-
-try:
-    form_sheet = open_form_sheet()
-except Exception as e:
-    st.error("❌ Could not connect to Form Sheet.")
-    st.stop()
-
+    try:
+        sheet = client.open_by_key(sheet_id).sheet1
+        return sheet
+    except Exception as e:
+        st.error(f"❌ Could not connect to Form Sheet: {e}")
+        st.stop()
+ 
+form_sheet = open_form_sheet(SHEET_ID_form)
 
 # -------------------------------
 # REVIEWS SHEET (admin evaluations)
 # -------------------------------
 @st.cache_resource
-def open_reviews_sheet():
+def open_reviews_sheet(sheet_id):
     client = get_gspread_client()
-    return client.open_by_key(SHEET_ID_Reviews).sheet1
-
-try:
-    reviews_sheet = open_reviews_sheet()
-except Exception as e:
-    st.error("❌ Could not connect to Reviews Sheet.")
-    st.stop()
+    try:
+        sheet = client.open_by_key(sheet_id).sheet1
+        return sheet
+    except Exception as e:
+        st.error(f"❌ Could not connect to Form Sheet: {e}")
+        st.stop()
+ 
+review_sheet = open_reviews_sheet(SHEET_ID_Reviews)
 
 # ------------------------------
 # ADMIN LOGIN
