@@ -9,7 +9,7 @@ from google.oauth2.service_account import Credentials
 # ------------------------------
 # PAGE CONFIG & STYLES
 # ------------------------------
-st.set_page_config(page_title="**ITC Club — Admin Dashboard**", layout="wide", page_icon="🛠️")
+st.set_page_config(page_title="ITC Club — Admin Dashboard", layout="wide", page_icon="🛠️")
 st.image("IMG_20251102_204411_811.png", use_container_width=True)
 
 st.markdown("""
@@ -152,7 +152,7 @@ with tab1:
     st.subheader("Overview Metrics")
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown(f"<div class='metric-card'><h3>👥 Total Applicants</h3><h1>{len(df)+1}</h1></div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='metric-card'><h3>👥 Total Applicants</h3><h1>{len(df)}</h1></div>", unsafe_allow_html=True)
     with col2:
         avg = round(df['Total_Score'].mean(), 2) if 'Total_Score' in df.columns else 0
         st.markdown(f"<div class='metric-card'><h3>⭐ Average Score</h3><h1>{avg}</h1></div>", unsafe_allow_html=True)
