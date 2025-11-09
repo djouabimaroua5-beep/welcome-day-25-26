@@ -209,9 +209,25 @@ with tab2:
 # ------------------------------
 with tab3:
     st.subheader("Review and Add Notes")
+    
+    # --- Check if we should reset the form ---
+    if "reset_flag" in st.session_state and st.session_state.reset_flag:
+        st.session_state.candidate_select = "-- Select a candidate --"
+        st.session_state.reset_flag = False  # clear it
 
-    candidate = st.selectbox("Select Candidate", options=df["Name"].unique() if "Name" in df.columns else [])
-    if candidate:
+    # --- Build options list ---
+    options = ["-- Select a candidate --"]
+    if "Name" in df.columns:
+        options += list(df["Name"].unique())
+    
+    # --- Selectbox with session_state key ---
+    candidate = st.selectbox(
+        "Select Candidate",
+        options=options,
+        key="candidate_select"  # <-- important
+    )
+
+    if candidate != "-- Select a candidate --":
         row = df[df["Name"] == candidate].iloc[0]
 
         # --- Get existing data from form sheet ---
@@ -251,10 +267,11 @@ with tab3:
             computed_total = round(((final_score_of_domains + skills_score) / 2) * 0.6 + (motivation_score * 0.4), 2)
 
         st.markdown("### 📈 Evaluation Summary")
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         col1.metric("🎯 **Domain Avg**", round(final_score_of_domains, 2))
         col2.metric("💪 **Motivation**", motivation_score)
-        col3.metric("✅ **Final Total**", round(computed_total, 2))
+        col3.metric("🧠 **Skills**", skills_score)
+        col4.metric("✅ **Final Total**", round(computed_total, 2))
 
         if st.button("💾 Save Review"):
             try:
@@ -281,6 +298,16 @@ with tab3:
                 review_sheet.append_row(review_data)
 
                 st.success(f"✅ Review saved successfully for {candidate}")
+
+                st.toast("Review successfully added! 🎉")
+                st.snow()
+
+                # st.session_state["candidate_select"] = "-- Select a candidate --"
+                # 🔁 Set flag to reset on next rerun
+                st.session_state.reset_flag = True
+                st.rerun()
+
+
 
             except Exception as e:
                 st.error(f"⚠️ Error saving review: {e}")
